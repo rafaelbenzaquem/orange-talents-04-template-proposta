@@ -18,6 +18,7 @@ public class Proposta {
     private String endereco;
     private BigDecimal salario;
 
+    @Deprecated
     public Proposta(){}
 
     public Proposta(Long id, String nome, String email, String documento, String endereco, BigDecimal salario) {

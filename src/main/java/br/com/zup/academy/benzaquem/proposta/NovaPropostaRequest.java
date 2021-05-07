@@ -1,5 +1,7 @@
 package br.com.zup.academy.benzaquem.proposta;
 
+import br.com.zup.academy.benzaquem.shared.CampoUnico;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,6 +15,7 @@ public class NovaPropostaRequest {
     @Email
     @NotBlank
     private String email;
+    @CampoUnico(domainClass = Proposta.class,fieldName = "documento")
     @NotBlank
     @CpfOuCnpj
     private String documento;

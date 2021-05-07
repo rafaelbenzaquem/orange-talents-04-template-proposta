@@ -29,7 +29,7 @@ public class PropostasControllerTest {
     @Order(1)
     public void propostaPessoaFisicaSalvaComSucessoRetorna201() throws Exception {
         String requestBody = "{" +
-                "\"documento\":\"77643070253\"," +
+                "\"documento\":\"99014013051\"," +
                 "\"nome\":\"Rafael Benzaquem neto\"," +
                 "\"email\":\"rafael.neto@zup.com.br\"," +
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
@@ -66,9 +66,27 @@ public class PropostasControllerTest {
     }
 
     @Test
+    @Order(3)
+    public void propostaComDocumentoDuplicadoRetorna422() throws Exception {
+        String requestBody = "{" +
+                "\"documento\":\"69445807000134\"," +
+                "\"nome\":\"Flynow\"," +
+                "\"email\":\"admin@flynow.com\"," +
+                "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
+                "\"salario\":100000.00" +
+                "}";
+
+        URI uri = new URI("/propostas");
+        mockMvc.perform(MockMvcRequestBuilders.post(uri)
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.UNPROCESSABLE_ENTITY.value()));
+    }
+
+    @Test
     public void propostaComEmailInvalidoRetorna400() throws Exception {
         String requestBody = "{" +
-                "\"documento\":\"77643070253\"," +
+                "\"documento\":\"38348296093\"," +
                 "\"nome\":\"Rafael Benzaquem neto\"," +
                 "\"email\":\"laçskdjaçsldfj\"," +
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
@@ -85,7 +103,7 @@ public class PropostasControllerTest {
     @Test
     public void propostaComEmailNulloOuVazioRetorna400() throws Exception {
         String requestBody = "{" +
-                "\"documento\":\"77643070253\"," +
+                "\"documento\":\"38348296093\"," +
                 "\"nome\":\"Rafael Benzaquem neto\"," +
                 "\"email\":\"\"," +
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
@@ -102,7 +120,7 @@ public class PropostasControllerTest {
     @Test
     public void propostaComSalarioNegativoRetorna400() throws Exception {
         String requestBody = "{" +
-                "\"documento\":\"77643070253\"," +
+                "\"documento\":\"38348296093\"," +
                 "\"nome\":\"Rafael Benzaquem neto\"," +
                 "\"email\":\"rafael.neto@outlook.com\"," +
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
