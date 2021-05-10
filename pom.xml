@@ -15,6 +15,7 @@
     <description>Implementando o desafio de proposta</description>
     <properties>
         <java.version>11</java.version>
+        <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
     </properties>
     <dependencies>
 
@@ -42,6 +43,12 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -80,6 +87,18 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

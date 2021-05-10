@@ -1,9 +1,9 @@
 package br.com.zup.academy.benzaquem.proposta;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import br.com.zup.academy.benzaquem.analise.AnalisePropostaResponse;
+import br.com.zup.academy.benzaquem.analise.EstadoAnalise;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -17,9 +17,13 @@ public class Proposta {
     private String documento;
     private String endereco;
     private BigDecimal salario;
+    @Enumerated(EnumType.STRING)
+    private EstadoProposta estado;
+
 
     @Deprecated
-    public Proposta(){}
+    public Proposta() {
+    }
 
     public Proposta(Long id, String nome, String email, String documento, String endereco, BigDecimal salario) {
         this.id = id;
@@ -52,5 +56,15 @@ public class Proposta {
 
     public BigDecimal getSalario() {
         return salario;
+    }
+
+    public EstadoProposta getEstado() {
+        return estado;
+    }
+
+    public void atualizarAposAnalise(AnalisePropostaResponse analiseResponse) {
+        if (analiseResponse.getDocumento().equals(documento))
+            this.estado = analiseResponse.getResultadoSolicitacao().equals(EstadoAnalise.SEM_RESTRICAO) ? EstadoProposta.ELEGIVEL : EstadoProposta.NAO_ELEGIVEL;
+
     }
 }
