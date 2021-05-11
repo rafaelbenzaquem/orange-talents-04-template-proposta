@@ -34,6 +34,6 @@ public class NovaPropostaRequest {
     }
 
     public Proposta toModel(){
-        return new Proposta(null,this.nome,this.email,this.documento,this.endereco,this.salario);
+        return new Proposta(null,this.nome,this.email,this.documento,this.endereco,this.salario,null);
     }
 }

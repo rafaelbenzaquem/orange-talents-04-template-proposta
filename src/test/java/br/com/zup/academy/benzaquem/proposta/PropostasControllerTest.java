@@ -36,6 +36,8 @@ public class PropostasControllerTest {
                 "\"salario\":2500.00" +
                 "}";
 
+        System.out.println(requestBody);
+
         URI uri = new URI("/propostas");
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .content(requestBody)

@@ -17,8 +17,8 @@ public class PropostaRepositoryTest {
     private PropostaRepository propostaRepository;
 
     @Test
-    public void buscarPropostaPorDocumento(){
-        propostaRepository.save(new Proposta(null,"Andressa","andreca@email.com","92255765012","Tv Frei Ambrosio, N 925", new BigDecimal(1800)));
+    public void buscarPropostaPorDocumento() {
+        propostaRepository.save(new Proposta(null, "Andressa", "andreca@email.com", "92255765012", "Tv Frei Ambrosio, N 925", new BigDecimal(1800), null));
         Proposta proposta = propostaRepository.findByDocumento("92255765012").orElse(null);
         Assertions.assertNotNull(proposta);
     }

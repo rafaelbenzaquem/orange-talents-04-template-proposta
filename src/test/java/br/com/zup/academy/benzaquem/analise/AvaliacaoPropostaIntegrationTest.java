@@ -29,7 +29,7 @@ public class AvaliacaoPropostaIntegrationTest {
                         "andreca2@email.com",
                         "92255765012",
                         "Tv Frei Ambrosio, N 925",
-                        new BigDecimal(1800)));
+                        new BigDecimal(1800), null));
         AnalisePropostaResponse avaliacaoResponse = externalService.solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta));
 
         Assertions.assertNotNull(avaliacaoResponse);
