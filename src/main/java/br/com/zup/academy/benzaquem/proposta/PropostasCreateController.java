@@ -21,24 +21,26 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/propostas")
-public class PropostasController {
+public class PropostasCreateController {
 
     @Autowired
     private PropostaRepository propostaRepository;
     @Autowired
     private AnaliseFinanceiraExternalService analiseFinanceiraExternalService;
 
-    Logger logger = LoggerFactory.getLogger(PropostasController.class);
+    Logger logger = LoggerFactory.getLogger(PropostasCreateController.class);
 
     @PostMapping
     @Transactional
     public ResponseEntity<Void> cadastrar(@RequestBody @Valid NovaPropostaRequest novaPropostaRequest) {
         Proposta proposta = novaPropostaRequest.toModel();
         try {
+            propostaRepository.save(proposta);
             AnalisePropostaResponse analisePropostaResponse = analiseFinanceiraExternalService.
                     solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta));
             proposta.atualizarAposAnalise(analisePropostaResponse);
-            propostaRepository.save(proposta);
+//            propostaRepository.save(proposta);
+            logger.info("Proposta id:" + proposta.getId() + " salva com sucesso");
         } catch (FeignException ex) {
             logger.warn("Não foi possível completar o processamento do serviço externo de analise financeira", ex);
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();

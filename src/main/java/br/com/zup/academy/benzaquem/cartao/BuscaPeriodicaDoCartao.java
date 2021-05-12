@@ -29,7 +29,7 @@ public class BuscaPeriodicaDoCartao {
         List<Proposta> propostasElegiveisSemCartao = propostaRepository.findAllByEstadoAndIdCartaoIsNull(EstadoProposta.ELEGIVEL);
         propostasElegiveisSemCartao.forEach(proposta -> {
             try {
-                IdCartaoResponse idCartaoResponse = cartaoExternalService.recuperarDadosCartao(new SolicitanteCartaoRequest(proposta));
+                IdCartaoResponse idCartaoResponse = cartaoExternalService.recuperarDadosCartao(proposta.getId());
                 proposta.associarIdCartao(idCartaoResponse);
                 propostaRepository.save(proposta);
                 logger.info("Cartão " + idCartaoResponse.getId().substring(0, 4) + "-****-****-**** foi associado a proposta " + proposta.getId());
