@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -21,6 +22,7 @@ public class AvaliacaoPropostaIntegrationTest {
     private AnaliseFinanceiraExternalService externalService;
 
     @Test
+    @Transactional
     public void processarPropostaComSolicitacaoDeAvaliacaoFinanceira() {
 
         Proposta proposta = propostaRepository.save(new Proposta
@@ -30,12 +32,12 @@ public class AvaliacaoPropostaIntegrationTest {
                         "92255765012",
                         "Tv Frei Ambrosio, N 925",
                         new BigDecimal(1800), null));
+        propostaRepository.save(proposta);
         AnalisePropostaResponse avaliacaoResponse = externalService.solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta));
 
         Assertions.assertNotNull(avaliacaoResponse);
 
         proposta.atualizarAposAnalise(avaliacaoResponse);
-        propostaRepository.save(proposta);
         proposta = propostaRepository.findById(proposta.getId()).orElse(null);
         Assertions.assertTrue(proposta.getEstado() != EstadoProposta.NAO_VERIFICADO);
     }

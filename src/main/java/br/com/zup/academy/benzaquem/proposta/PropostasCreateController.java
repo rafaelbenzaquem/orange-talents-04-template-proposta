@@ -31,7 +31,7 @@ public class PropostasCreateController {
     Logger logger = LoggerFactory.getLogger(PropostasCreateController.class);
 
     @PostMapping
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<Void> cadastrar(@RequestBody @Valid NovaPropostaRequest novaPropostaRequest) {
         Proposta proposta = novaPropostaRequest.toModel();
         try {
