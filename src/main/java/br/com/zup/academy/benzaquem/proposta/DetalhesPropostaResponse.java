@@ -20,7 +20,7 @@ public class DetalhesPropostaResponse {
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
         this.estado = proposta.getEstado();
-        this.idCartao = proposta.getIdCartao();
+        this.idCartao = proposta.getCartao() == null ? null : proposta.getCartao().getId();
     }
 
     public Long getId() {

@@ -3,7 +3,6 @@ package br.com.zup.academy.benzaquem.cartao;
 import br.com.zup.academy.benzaquem.proposta.EstadoProposta;
 import br.com.zup.academy.benzaquem.proposta.Proposta;
 import br.com.zup.academy.benzaquem.proposta.PropostaRepository;
-import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +18,26 @@ public class BuscaPeriodicaDoCartao {
     private PropostaRepository propostaRepository;
 
     @Autowired
+    private CartaoRepository cartaoRepository;
+
+    @Autowired
     private CartaoExternalService cartaoExternalService;
 
-    private Logger logger = LoggerFactory.getLogger(BuscaPeriodicaDoCartao.class);
+    private final Logger logger = LoggerFactory.getLogger(BuscaPeriodicaDoCartao.class);
 
 
     @Scheduled(fixedDelay = 2000)
     public void requisitarCartoesDasPropostaasElegiveis() {
-        List<Proposta> propostasElegiveisSemCartao = propostaRepository.findAllByEstadoAndIdCartaoIsNull(EstadoProposta.ELEGIVEL);
+        List<Proposta> propostasElegiveisSemCartao = propostaRepository.findAllByEstadoAndCartao_Id(EstadoProposta.ELEGIVEL, null);
         propostasElegiveisSemCartao.forEach(proposta -> {
-            try {
-                IdCartaoResponse idCartaoResponse = cartaoExternalService.recuperarDadosCartao(proposta.getId());
-                proposta.associarIdCartao(idCartaoResponse);
-                propostaRepository.save(proposta);
-                logger.info("Cartão " + idCartaoResponse.getId().substring(0, 4) + "-****-****-**** foi associado a proposta " + proposta.getId());
-            } catch (FeignException ex) {
-                logger.warn("Pedido de cartão não foi processado, aguardar a proxima interação!", ex);
-            }
+            var idCartaoResponse = cartaoExternalService.recuperarDadosCartao(proposta.getId());
+            var cartao = idCartaoResponse.toModel(proposta);
+            cartaoRepository.save(cartao);
+
+            proposta.associarCartao(cartao);
+            propostaRepository.save(proposta);
+            logger.info(new StringBuilder("Cartão ").append(idCartaoResponse.getId(), 0, 4).append("-****-****-**** foi associado a proposta ").append(proposta.getId()).toString());
+
         });
 
     }

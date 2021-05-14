@@ -2,7 +2,7 @@ package br.com.zup.academy.benzaquem.proposta;
 
 import br.com.zup.academy.benzaquem.analise.AnalisePropostaResponse;
 import br.com.zup.academy.benzaquem.analise.EstadoAnalise;
-import br.com.zup.academy.benzaquem.cartao.IdCartaoResponse;
+import br.com.zup.academy.benzaquem.cartao.Cartao;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,21 +21,22 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estado;
 
-    private String idCartao;
+    @OneToOne @JoinColumn(name = "cartao_id")
+    private Cartao cartao;
 
 
     @Deprecated
     public Proposta() {
     }
 
-    public Proposta(Long id, String nome, String email, String documento, String endereco, BigDecimal salario, String idCartao) {
+    public Proposta(Long id, String nome, String email, String documento, String endereco, BigDecimal salario, Cartao cartao) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.documento = documento;
         this.endereco = endereco;
         this.salario = salario;
-        this.idCartao = idCartao;
+        this.cartao = cartao;
     }
 
     public Long getId() {
@@ -66,8 +67,8 @@ public class Proposta {
         return estado;
     }
 
-    public String getIdCartao() {
-        return idCartao;
+    public Cartao getCartao() {
+        return cartao;
     }
 
     public void atualizarAposAnalise(AnalisePropostaResponse analiseResponse) {
@@ -76,7 +77,7 @@ public class Proposta {
 
     }
 
-    public void associarIdCartao(IdCartaoResponse idCartaoResponse) {
-        this.idCartao = idCartaoResponse.getId();
+    public void associarCartao(Cartao cartao) {
+        this.cartao=cartao;
     }
 }

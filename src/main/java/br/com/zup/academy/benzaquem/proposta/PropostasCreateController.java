@@ -31,7 +31,7 @@ public class PropostasCreateController {
     Logger logger = LoggerFactory.getLogger(PropostasCreateController.class);
 
     @PostMapping
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = FeignException.class)
     public ResponseEntity<Void> cadastrar(@RequestBody @Valid NovaPropostaRequest novaPropostaRequest) {
         Proposta proposta = novaPropostaRequest.toModel();
         try {
@@ -39,7 +39,6 @@ public class PropostasCreateController {
             AnalisePropostaResponse analisePropostaResponse = analiseFinanceiraExternalService.
                     solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta));
             proposta.atualizarAposAnalise(analisePropostaResponse);
-//            propostaRepository.save(proposta);
             logger.info("Proposta id:" + proposta.getId() + " salva com sucesso");
         } catch (FeignException ex) {
             logger.warn("Não foi possível completar o processamento do serviço externo de analise financeira", ex);
