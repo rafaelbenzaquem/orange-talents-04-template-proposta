@@ -11,9 +11,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:18080/auth/realms/users-proposta}
+#          jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:18080/auth/realms/users-proposta/protocol/openid-connect/certs}
 
 cartoes:
   url: ${CARTOES_URL:http://localhost:8888/api/cartoes}
 
 solicitacao:
   url: ${SOLICITACAO_URL:http://localhost:9999/api/solicitacao}
+

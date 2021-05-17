@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.Base64;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class BiometriasControllerTest {
 
