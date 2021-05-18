@@ -9,12 +9,8 @@ public class Teste {
 
     @Test
     public void teste(){
-        String originalInput = "minha digital";
-        System.out.println(originalInput);
-        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
-        System.out.println(encodedString);
-
-        System.out.println(new String(Base64.getDecoder().decode(encodedString)));
+        String teste = "1234-1234-1234";
+        System.out.println(teste.matches("[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"));
     }
 
 }

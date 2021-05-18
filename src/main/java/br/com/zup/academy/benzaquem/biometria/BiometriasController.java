@@ -25,17 +25,17 @@ public class BiometriasController {
     @PostMapping("/{idCartao}/cartao")
     @Transactional
     public ResponseEntity<?> cadastrarBiometria(@PathVariable String idCartao, @RequestBody String dadosBiometricosBase64) {
-        Optional<Cartao> opt = cartaoRepository.findById(idCartao);
         if (dadosBiometricosBase64 == null || dadosBiometricosBase64.isBlank())
             return ResponseEntity.badRequest().body("Dados biometricos inválidos.");
+        Optional<Cartao> opt = cartaoRepository.findById(idCartao);
         if (opt.isPresent()) {
             Cartao cartao = opt.get();
             Biometria biometria = biometriaRepository.save(new Biometria(null, dadosBiometricosBase64,cartao));
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                    .path("/{id}").buildAndExpand(biometria.getId()).toUri();
+            URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/biometrias/{id}").buildAndExpand(biometria.getId()).toUri();
             return ResponseEntity.created(uri).build();
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cartão com ID = " + idCartao + ", não foi encontrado!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cartão com ID = " + idCartao + " não foi encontrado!");
         }
     }
 
