@@ -4,10 +4,11 @@ import br.com.zup.academy.benzaquem.proposta.EstadoProposta;
 import br.com.zup.academy.benzaquem.proposta.Proposta;
 import br.com.zup.academy.benzaquem.proposta.PropostaRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,19 +21,9 @@ public class AvaliacaoPropostaIntegrationTest {
     @Autowired
     private PropostaRepository propostaRepository;
 
+    @MockBean
     private AnaliseFinanceiraExternalService analiseSimuladaSemRestricao;
 
-    static class AnaliseFinaceiraSemRestricaoMock implements AnaliseFinanceiraExternalService {
-        @Override
-        public AnalisePropostaResponse solicitarAnaliseExternaViaHttp(AnalisePropostaRequest request) {
-            return new AnalisePropostaResponse(request.getDocumento(), request.getNome(), EstadoAnalise.SEM_RESTRICAO);
-        }
-    }
-
-    @BeforeEach
-    public void setup() {
-        analiseSimuladaSemRestricao = new AnaliseFinaceiraSemRestricaoMock();
-    }
 
 
     @Test
@@ -46,8 +37,9 @@ public class AvaliacaoPropostaIntegrationTest {
                         "92255765012",
                         "Tv Frei Ambrosio, N 925",
                         new BigDecimal(1800), null));
+        Mockito.when(analiseSimuladaSemRestricao.solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta)))
+                .thenReturn(new AnalisePropostaResponse(proposta.getDocumento(), proposta.getNome(), EstadoAnalise.SEM_RESTRICAO));
 
-        System.out.println(proposta.getId());
         AnalisePropostaResponse avaliacaoResponse = analiseSimuladaSemRestricao.solicitarAnaliseExternaViaHttp(new AnalisePropostaRequest(proposta));
         Assertions.assertNotNull(avaliacaoResponse);
         proposta.atualizarAposAnalise(avaliacaoResponse);

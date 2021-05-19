@@ -2,14 +2,11 @@ package br.com.zup.academy.benzaquem.biometria;
 
 import br.com.zup.academy.benzaquem.cartao.Cartao;
 import br.com.zup.academy.benzaquem.cartao.CartaoRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
 import java.util.Base64;
-import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -62,7 +58,7 @@ public class BiometriasControllerTest {
                 .contentType(MediaType.TEXT_PLAIN)
                 .content(fakeDigital))
                 .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()))
-                .andExpect(MockMvcResultMatchers.content().string("Cartão com ID = " + idCartao + ", não foi encontrado!"));
+                .andExpect(MockMvcResultMatchers.content().string("Cartão com ID = " + idCartao + " não foi encontrado!"));
     }
 
     @Test

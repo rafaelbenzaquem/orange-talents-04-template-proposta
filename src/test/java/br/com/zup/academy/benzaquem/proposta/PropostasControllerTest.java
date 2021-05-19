@@ -1,13 +1,15 @@
 package br.com.zup.academy.benzaquem.proposta;
 
+import br.com.zup.academy.benzaquem.analise.*;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,17 +28,23 @@ public class PropostasControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private AnaliseFinanceiraExternalService analiseServiceMocked;
+
     @Test
     @Order(1)
     public void propostaPessoaFisicaSalvaComSucessoRetorna201() throws Exception {
         String requestBody = "{" +
                 "\"documento\":\"99014013051\"," +
-                "\"nome\":\"Rafael Benzaquem neto\"," +
+                "\"nome\":\"Rafael Benzaquem Neto\"," +
                 "\"email\":\"rafael.neto@zup.com.br\"," +
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
                 "\"salario\":2500.00" +
                 "}";
 
+        Mockito.when(analiseServiceMocked.solicitarAnaliseExternaViaHttp(
+                new AnalisePropostaRequest("99014013051", "Rafael Benzaquem Neto", 1L)))
+                .thenReturn(new AnalisePropostaResponse("99014013051", "Rafael Benzaquem Neto", EstadoAnalise.SEM_RESTRICAO));
 
         URI uri = new URI("/propostas");
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -57,6 +65,10 @@ public class PropostasControllerTest {
                 "\"endereco\":\"Travessa frei Ambrósio , n° 925, casa B\"," +
                 "\"salario\":100000.00" +
                 "}";
+
+        Mockito.when(analiseServiceMocked.solicitarAnaliseExternaViaHttp(
+                new AnalisePropostaRequest("69445807000134", "Flynow", 2L)))
+                .thenReturn(new AnalisePropostaResponse("69445807000134", "Flynow", EstadoAnalise.SEM_RESTRICAO));
 
         URI uri = new URI("/propostas");
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
