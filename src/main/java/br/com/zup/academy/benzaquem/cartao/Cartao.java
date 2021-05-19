@@ -13,7 +13,11 @@ public class Cartao {
     @Id
     private String id;
 
-    @OneToOne @JoinColumn(name = "proposta_id")
+    @Enumerated(EnumType.STRING)
+    private EstadoCartao estadoCartao = EstadoCartao.DESBLOQUEADO;
+
+    @OneToOne
+    @JoinColumn(name = "proposta_id")
     private Proposta proposta;
 
     @OneToOne
@@ -40,7 +44,7 @@ public class Cartao {
         this.bloqueio = bloqueio;
     }
 
-    public void addBiometria(Biometria biometria){
+    public void addBiometria(Biometria biometria) {
         this.biometrias.add(biometria);
     }
 
@@ -54,5 +58,17 @@ public class Cartao {
 
     public Proposta getProposta() {
         return proposta;
+    }
+
+    public EstadoCartao getEstadoCartao() {
+        return estadoCartao;
+    }
+
+    public void bloquear() {
+        this.estadoCartao = EstadoCartao.BLOQUEADO;
+    }
+
+    public void desbloquear() {
+        this.estadoCartao = EstadoCartao.DESBLOQUEADO;
     }
 }
