@@ -21,6 +21,19 @@ spring:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:18080/auth/realms/users-proposta}
           jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:18080/auth/realms/users-proposta/protocol/openid-connect/certs}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, healfh, prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      - aplicacao=${NOME_DA_APLICACAO:serviço de proposta}
+      - ambiente=${AMBIENTE:desenvolvimento}
+
 cartoes:
   url: ${CARTOES_URL:http://localhost:8888/api/cartoes}
 

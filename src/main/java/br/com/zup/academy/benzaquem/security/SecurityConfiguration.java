@@ -19,16 +19,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests(authorizeRequests ->{
 
-                authorizeRequests
-                        .antMatchers(HttpMethod.GET, "/actuator/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.GET, "/propostas/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.GET, "/biometrias/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.GET, "/cartoes/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.POST, "/cartoes/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.POST, "/propostas/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.POST, "/biometrias/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .antMatchers(HttpMethod.PUT, "/bloqueios/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
-                        .anyRequest().authenticated();}
+                    try {
+                        authorizeRequests
+                                .antMatchers(HttpMethod.GET, "/actuator/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.GET, "/propostas/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.GET, "/biometrias/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.GET, "/cartoes/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.POST, "/cartoes/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.POST, "/propostas/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.POST, "/biometrias/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.PUT, "/bloqueios/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .anyRequest().authenticated().and().csrf().disable();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
         )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
