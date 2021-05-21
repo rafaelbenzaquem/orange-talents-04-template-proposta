@@ -29,6 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 .antMatchers(HttpMethod.POST, "/propostas/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
                                 .antMatchers(HttpMethod.POST, "/biometrias/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
                                 .antMatchers(HttpMethod.PUT, "/bloqueios/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
+                                .antMatchers(HttpMethod.PUT, "/viagens/**").hasAuthority("SCOPE_benzaquem-proposta-scope")
                                 .anyRequest().authenticated().and().csrf().disable();
                     } catch (Exception e) {
                         e.printStackTrace();

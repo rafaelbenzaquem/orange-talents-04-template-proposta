@@ -9,7 +9,7 @@ public class OfuscadorUtil {
     public static String ofuscarCartao(String idCartao){
         if(RegexUtil.isNotIdCartaoValido(idCartao))
             return idCartao;
-        return idCartao.substring(0,5)+"-****-****-****";
+        return idCartao.substring(0,4)+"-****-****-****";
     }
 
     public static String ofuscarCpf(String cpf){

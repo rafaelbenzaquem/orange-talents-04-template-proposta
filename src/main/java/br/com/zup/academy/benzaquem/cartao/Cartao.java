@@ -3,6 +3,7 @@ package br.com.zup.academy.benzaquem.cartao;
 import br.com.zup.academy.benzaquem.biometria.Biometria;
 import br.com.zup.academy.benzaquem.bloqueio.Bloqueio;
 import br.com.zup.academy.benzaquem.proposta.Proposta;
+import br.com.zup.academy.benzaquem.viagem.Viagem;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class Cartao {
     @OneToMany(mappedBy = "cartao")
     private List<Biometria> biometrias = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cartao")
+    private List<Viagem> viagens = new ArrayList<>();
+
     @Deprecated
     public Cartao() {
     }
@@ -44,12 +48,20 @@ public class Cartao {
         this.bloqueio = bloqueio;
     }
 
-    public void addBiometria(Biometria biometria) {
-        this.biometrias.add(biometria);
-    }
-
     public List<Biometria> getBiometrias() {
         return biometrias;
+    }
+
+    public Boolean addBiometria(Biometria biometria) {
+       return this.biometrias.add(biometria);
+    }
+
+    public List<Viagem> getViagens() {
+        return viagens;
+    }
+
+    public Boolean addViagem( Viagem  viagem){
+        return this.viagens.add(viagem);
     }
 
     public String getId() {
