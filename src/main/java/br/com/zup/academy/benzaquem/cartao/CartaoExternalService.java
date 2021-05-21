@@ -9,7 +9,7 @@ import javax.validation.Valid;
 @FeignClient(url = "${cartoes.url}", name = "cartoes")
 public interface CartaoExternalService {
 
-    @GetMapping( consumes = "application/json")
+    @GetMapping(consumes = "application/json")
     IdCartaoResponse recuperarDadosCartao(@RequestParam Long idProposta);
 
     @PostMapping(value = "/{idCartao}/bloqueios", consumes = "application/json")
@@ -17,5 +17,8 @@ public interface CartaoExternalService {
 
     @PostMapping(value = "/{idCartao}/avisos", consumes = "application/json")
     IdCartaoResponse avisarViagem(@PathVariable String idCartao, @RequestBody @Valid AvisoLegadoRequest request);
+
+    @PostMapping(value = "/{idCartao}/carteiras", consumes = "application/json")
+    CarteiraExternaResponse associarCarteira(@PathVariable String idCartao, CarteiraExternaRequest request);
 
 }
