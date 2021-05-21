@@ -3,6 +3,9 @@ package br.com.zup.academy.benzaquem.cartao;
 import br.com.zup.academy.benzaquem.proposta.EstadoProposta;
 import br.com.zup.academy.benzaquem.proposta.Proposta;
 import br.com.zup.academy.benzaquem.proposta.PropostaRepository;
+
+import static br.com.zup.academy.benzaquem.shared.util.OfuscadorUtil.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +33,14 @@ public class BuscaPeriodicaDoCartao {
 
     @Scheduled(fixedDelay = 2000)
     public void requisitarCartoesDasPropostaasElegiveis() {
-        List<Proposta> propostasElegiveisSemCartao = propostaRepository.findAllByEstadoAndCartao_Id(EstadoProposta.ELEGIVEL, null);
+        var propostasElegiveisSemCartao = propostaRepository.findAllByEstadoAndCartao_Id(EstadoProposta.ELEGIVEL, null);
         propostasElegiveisSemCartao.forEach(proposta -> {
             var idCartaoResponse = cartaoExternalService.recuperarDadosCartao(proposta.getId());
             var cartao = idCartaoResponse.toModel(proposta);
             cartaoRepository.save(cartao);
-
             proposta.associarCartao(cartao);
             propostaRepository.save(proposta);
-            logger.info(new StringBuilder("Cartão ").append(idCartaoResponse.getId(), 0, 4).append("-****-****-**** foi associado a proposta ").append(proposta.getId()).toString());
+            logger.info(new StringBuilder("Cartão ").append(ofuscarCartao(idCartaoResponse.getId())).append(" foi associado a proposta ").append(proposta.getId()).toString());
 
         });
 

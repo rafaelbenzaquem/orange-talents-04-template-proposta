@@ -1,7 +1,10 @@
-package br.com.zup.academy.benzaquem.viagem;
+package br.com.zup.academy.benzaquem.aviso;
 
+import br.com.zup.academy.benzaquem.cartao.AvisoLegadoRequest;
 import br.com.zup.academy.benzaquem.cartao.Cartao;
+import br.com.zup.academy.benzaquem.cartao.CartaoExternalService;
 import br.com.zup.academy.benzaquem.cartao.CartaoRepository;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +21,22 @@ import static br.com.zup.academy.benzaquem.shared.util.RegexUtil.isNotIdCartaoVa
 
 @RestController
 @RequestMapping("/viagens")
-public class ViagensController {
+public class AvisosController {
 
     @Autowired
-    private ViagemRepository viagemRepository;
+    private AvisoRepository viagemRepository;
 
     @Autowired
     private CartaoRepository cartaoRepository;
 
-    private Logger log = LoggerFactory.getLogger(ViagensController.class);
+    @Autowired
+    private CartaoExternalService cartaoExternalService;
+
+    private Logger log = LoggerFactory.getLogger(AvisosController.class);
 
     @PutMapping("/{idCartao}/cartoes")
     public ResponseEntity<?> cadastrar(@PathVariable String idCartao,
-                                       @RequestBody @Valid ViagemRequest viagemRequest,
+                                       @RequestBody @Valid AvisoRequest viagemRequest,
                                        HttpServletRequest request) {
         if (idCartao == null || idCartao.isEmpty() || isNotIdCartaoValido(idCartao)) {
             log.warn("Cartão com ID = " + idCartao + " é inválido!");
@@ -39,10 +45,16 @@ public class ViagensController {
         Optional<Cartao> optCartao = cartaoRepository.findById(idCartao);
         if (optCartao.isPresent()) {
             Cartao cartao = optCartao.get();
-            Viagem viagem = viagemRequest.toModel(request.getRemoteAddr(),
+            Aviso viagem = viagemRequest.toModel(request.getRemoteAddr(),
                     request.getHeader("user-agent"),
                     cartao);
-            viagemRepository.save(viagem);
+            try {
+                cartaoExternalService.avisarViagem(idCartao, new AvisoLegadoRequest(viagemRequest.getDestino(), viagemRequest.getDataTermino()));
+                viagemRepository.save(viagem);
+            } catch (FeignException ex) {
+
+            }
+
             return ResponseEntity.ok().build();
         } else {
             log.warn("Cartão com ID = " + ofuscarCartao(idCartao) + " não foi encontrado!");

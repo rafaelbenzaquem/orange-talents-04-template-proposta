@@ -1,4 +1,4 @@
-package br.com.zup.academy.benzaquem.viagem;
+package br.com.zup.academy.benzaquem.aviso;
 
 import br.com.zup.academy.benzaquem.cartao.Cartao;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
-public class Viagem {
+public class Aviso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,10 +24,10 @@ public class Viagem {
     private Cartao cartao;
 
     @Deprecated
-    public Viagem() {
+    public Aviso() {
     }
 
-    public Viagem(Long id, String destino, LocalDate dataTermino, String ipCliente, String userAgent, Cartao cartao) {
+    public Aviso(Long id, String destino, LocalDate dataTermino, String ipCliente, String userAgent, Cartao cartao) {
         this.id = id;
         this.destino = destino;
         this.dataTermino = dataTermino;
