@@ -3,6 +3,7 @@ package br.com.zup.academy.benzaquem.proposta;
 import br.com.zup.academy.benzaquem.analise.AnalisePropostaResponse;
 import br.com.zup.academy.benzaquem.analise.EstadoAnalise;
 import br.com.zup.academy.benzaquem.cartao.Cartao;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,7 +22,8 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private EstadoProposta estado;
 
-    @OneToOne @JoinColumn(name = "cartao_id")
+    @OneToOne
+    @JoinColumn(name = "cartao_id")
     private Cartao cartao;
 
 
@@ -74,10 +76,13 @@ public class Proposta {
     public void atualizarAposAnalise(AnalisePropostaResponse analiseResponse) {
         if (analiseResponse.getDocumento().equals(documento))
             this.estado = analiseResponse.getResultadoSolicitacao().equals(EstadoAnalise.SEM_RESTRICAO) ? EstadoProposta.ELEGIVEL : EstadoProposta.NAO_ELEGIVEL;
-
     }
 
     public void associarCartao(Cartao cartao) {
-        this.cartao=cartao;
+        this.cartao = cartao;
+    }
+
+    public void encriptarDocumento(TextEncryptor textEncryptor) {
+        this.documento = textEncryptor.encrypt(this.documento);
     }
 }
