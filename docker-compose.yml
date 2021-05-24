@@ -1,38 +1,39 @@
 version: '3'
 services:
 
-#  proposta:
-#    build:
-#      dockerfile: ./docker/proposta.dockerfile
-#      context: .
-#    image: benzaquem/proposta
-#    restart: on-failure
-#    container_name: proposta
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      - mysql-proposta
-#      - analise
-#      - transacoes
-#      - contas
-#    environment:
-#      - BANCO_URL=jdbc:mysql://mysql-proposta:3306/proposta_db?allowPublicKeyRetrieval=true&sslMode=DISABLED
-#      - CARTOES_URL=http://contas:8888/api/cartoes
-#      - SOLICITACAO_URL=http://analise:9999/api/solicitacao
-#
-#
-#  mysql-proposta:
-#    image: mysql:latest
-#    command: --default-authentication-plugin=mysql_native_password
-#    restart: always
-#    container_name: mysql-proposta
-#    ports:
-#      - 3306:3306
-#    environment:
-#      - MYSQL_DATABASE=proposta_db
-#      - MYSQL_ROOT_PASSWORD=123456
-#    volumes:
-#      - mysql-proposta-volume:/var/lib/mysql
+  proposta:
+    build:
+      dockerfile: ./docker/proposta.dockerfile
+      context: .
+    image: benzaquem/proposta
+    restart: on-failure
+    container_name: proposta
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql-proposta
+      - analise
+      - transacoes
+      - contas
+    environment:
+      BANCO_URL: jdbc:mysql://mysql-proposta:3306/proposta_db?allowPublicKeyRetrieval=true&sslMode=DISABLED
+      CARTOES_URL: http://contas:8888/api/cartoes
+      SOLICITACAO_URL: http://analise:9999/api/solicitacao
+      JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+
+
+  mysql-proposta:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: mysql-proposta
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=proposta_db
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - mysql-proposta-volume:/var/lib/mysql
 
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"
