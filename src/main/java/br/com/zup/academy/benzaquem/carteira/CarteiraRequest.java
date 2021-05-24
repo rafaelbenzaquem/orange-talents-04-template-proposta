@@ -23,7 +23,9 @@ public class CarteiraRequest {
 
     public Carteira toModel(TipoCarteira tipoCarteira, Cartao cartao) {
         if (TipoCarteira.PAYPAL.equals(tipoCarteira))
-            return new Paypal(null, this.email, tipoCarteira, cartao);
+            return new Paypal(null, this.email, cartao);
+        else if (TipoCarteira.SAMSUNG_PAY.equals(tipoCarteira))
+            return new SamsungPay(null, this.email, cartao);
         return null;
     }
 }

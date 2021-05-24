@@ -16,7 +16,7 @@ public class Paypal extends Carteira {
     @Deprecated
     public Paypal(){}
 
-    public Paypal(Long id, String email, TipoCarteira tipoCarteira, Cartao cartao) {
+    public Paypal(Long id, String email, Cartao cartao) {
         super(id, email, TipoCarteira.PAYPAL);
         this.cartao = cartao;
     }

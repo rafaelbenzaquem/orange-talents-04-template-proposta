@@ -21,7 +21,7 @@ import java.net.URI;
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CarteirasControllerTest {
+public class CarteirasPaypalControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
