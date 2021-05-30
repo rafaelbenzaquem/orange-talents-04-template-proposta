@@ -15,11 +15,14 @@ services:
       - analise
       - transacoes
       - contas
+      - keycloak
     environment:
       BANCO_URL: jdbc:mysql://mysql-proposta:3306/proposta_db?allowPublicKeyRetrieval=true&sslMode=DISABLED
       CARTOES_URL: http://contas:8888/api/cartoes
       SOLICITACAO_URL: http://analise:9999/api/solicitacao
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+      KEYCLOAK_ISSUER_URI: http://keycloak:18080/auth/realms/users-proposta
+      KEYCLOAK_JWKS_URI: http://keycloak:18080/auth/realms/users-proposta/protocol/openid-connect/certs
 
 
   mysql-proposta:
