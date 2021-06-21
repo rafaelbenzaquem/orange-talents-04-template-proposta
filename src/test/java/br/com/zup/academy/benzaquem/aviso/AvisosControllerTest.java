@@ -92,19 +92,19 @@ public class AvisosControllerTest {
     }
 
     @Test
-    public void criarAvisoDeViagemComCartaoInvalidoRetorna404() throws Exception {
+    public void criarAvisoDeViagemComCartaoInvalidoRetorna400() throws Exception {
         String requestBody = "{" +
                 "\"destino\":\"Uberlândia\"," +
                 "\"dataTermino\":\"01/06/2021\"" +
                 "}";
 
-        String idCartao = "1234-1234-1234-0000";
+        String idCartao = "1234-1234-1234-0000&";
 
         URI uri = new URI("/viagens/" + idCartao + "/cartoes");
         mockMvc.perform(MockMvcRequestBuilders.put(uri)
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NOT_FOUND.value()));
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.BAD_REQUEST.value()));
     }
 
 
